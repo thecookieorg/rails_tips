@@ -43,3 +43,4 @@ Guide:
           Rails.application.routes.default_url_options[:locale]= I18n.locale 
 	end
 
+8. In our views, if we have home/index.html.erb we need to add index.fr.html.erb file. This will be rendered as the French version of the page.
