@@ -1,0 +1,45 @@
+Multilingual Rails 4 App
+-------------------------------
+
+{{ 
+  links: 
+    http://blog.cuberoot.in/multilingual-rails-application/
+    http://www.xyzpub.com/en/ruby-on-rails/3.2/i18n_mehrsprachige_rails_applikation.html
+}}
+
+Guide:
+1. Add fr.yml in config/locales
+
+2. In fr.yml copy the content from the en.yml and change en: to fr:
+
+3. In config/application.rb add:
+	config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
+
+4. In application_controller.rb add:
+	before_filter :set_locale
+
+	def set_locale
+    	  I18n.locale = params[:locale] if params[:locale].present?
+	end
+
+5. In app/views/layouts/application.html.erb add:
+	 <%= link_to_unless I18n.locale == :en, "English", locale: :en %> | <%= link_to_unless I18n.locale == :fr, “French”, locale: :fr %>
+
+6. In routes.rb add:
+	scope "(:locale)", :locale => /en|de/ do
+    	  root :to => 'page#index'
+  	  get "page/index"
+	  # List all other pages you have here by using get “controller/action”
+  	end
+
+7. For pretty URLS (http://localhost/en and http://localhost/fr) add this line to your application_controller.rb:
+	Rails.application.routes.default_url_options[:locale]= I18n.locale 
+	
+	your application_controller.rb should look like this:
+	before_filter :set_locale
+
+	def set_locale
+    	  I18n.locale = params[:locale] if params[:locale].present?
+          Rails.application.routes.default_url_options[:locale]= I18n.locale 
+	end
+
